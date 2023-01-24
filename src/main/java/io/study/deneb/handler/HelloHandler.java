@@ -20,14 +20,9 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
-@Configuration
+@Component
 public class HelloHandler {
 
-  @Bean
-  public RouterFunction<ServerResponse> routes() {
-    return route(GET("/"), this::hello)
-      .andRoute(GET("/stream"), this::stream);
-  }
 
   public Mono<ServerResponse> hello(ServerRequest req) {
     return ok().body(Flux.just("Hello", "World!"), String.class);
