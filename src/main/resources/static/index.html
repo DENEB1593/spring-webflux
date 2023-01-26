@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome page</title>
+</head>
+<body>
+  <div>
+    <h2>포스팅 수</h2><br>
+    <h3 id="post_count"></h3>
+  </div>
+  <script>
+    const sse = new EventSource("http://localhost:8080/post/count");
+
+    sse.addEventListener('connect', (e) => {
+      const { data: receivedConnectData } = e;
+    });
+  </script>
+</body>
+</html>

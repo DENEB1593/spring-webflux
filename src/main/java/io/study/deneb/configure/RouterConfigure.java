@@ -30,7 +30,8 @@ public class RouterConfigure {
     return route(GET("/"), helloHandler::hello)
       .andRoute(GET("/test"), request -> ok().body(just("Hello World"), String.class))
       .andRoute(GET("/stream"), helloHandler::stream)
-      .andRoute(POST("/post"), postHandler::save);
+      .andRoute(POST("/post"), postHandler::save)
+      .andRoute(GET("/post/count"), postHandler::count);
   }
 
 
