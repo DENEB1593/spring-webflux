@@ -10,8 +10,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureWebTestClient
-//@WebFluxTest
+@AutoConfigureWebTestClient // For WebFlux Support
 class PostHandlerTest {
 
   @Autowired
@@ -27,9 +26,20 @@ class PostHandlerTest {
       .exchange()
       .expectStatus().isOk()
       .expectBody()
-        //.consumeWith(System.out::println)
         .jsonPath("$.id").isNotEmpty()
         .jsonPath("$.content").isEqualTo(post.getContent());
+  }
+
+  @Test
+  void shouldReturnPostList() {
+    webTestClient.get().uri("/post")
+      .exchange()
+      .expectStatus().isOk()
+      .expectBody()
+        .jsonPath("$.size()").isEqualTo(3)
+        .jsonPath("$[?(@.id == 1)].content").isEqualTo("content1")
+        .jsonPath("$[?(@.id == 2)].content").isEqualTo("content2")
+        .jsonPath("$[?(@.id == 3)].content").isEqualTo("content3");
   }
 
 

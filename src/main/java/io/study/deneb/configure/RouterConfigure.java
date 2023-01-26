@@ -31,6 +31,7 @@ public class RouterConfigure {
       .andRoute(GET("/test"), request -> ok().body(just("Hello World"), String.class))
       .andRoute(GET("/stream"), helloHandler::stream)
       .andRoute(POST("/post"), postHandler::save)
+      .andRoute(GET("/post"), postHandler::findAll)
       .andRoute(GET("/post/count"), postHandler::count);
   }
 

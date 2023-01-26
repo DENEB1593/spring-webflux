@@ -13,6 +13,8 @@ import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 
+import static org.springframework.web.reactive.function.BodyInserters.fromServerSentEvents;
+
 @Component
 public class PostHandler {
 
@@ -29,14 +31,23 @@ public class PostHandler {
     return ServerResponse.ok().body(saved, Post.class);
   }
 
+  public Mono<ServerResponse> findAll(ServerRequest request) {
+    return ServerResponse.ok()
+      .bodyValue(postRepository.findAll());
+  }
+
   public Mono<ServerResponse> count(ServerRequest request) {
     return ServerResponse.ok()
       .contentType(MediaType.TEXT_EVENT_STREAM)
-      .body(BodyInserters.fromServerSentEvents(Flux.interval(Duration.ofSeconds(1))
-        .map(aLong -> ServerSentEvent.<Long>builder()
-          .id(String.valueOf(aLong))
+      .body(
+        fromServerSentEvents(Flux.interval(Duration.ofSeconds(1))
+        .map(time -> ServerSentEvent.<Long>builder()
+          .id(String.valueOf(time))
           .event("postcount-event")
           .data(postRepository.count())
-          .build())));
+          .build()
+        )
+        )
+      );
   }
 }

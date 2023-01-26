@@ -11,10 +11,14 @@
   </div>
   <script>
     const sse = new EventSource("http://localhost:8080/post/count");
+    const postCount = document.getElementById("post_count");
 
-    sse.addEventListener('connect', (e) => {
-      const { data: receivedConnectData } = e;
+    // event
+    sse.addEventListener('postcount-event', (e) => {
+      const data = e.data;
+      postCount.innerHTML = data;
     });
+
   </script>
 </body>
 </html>
